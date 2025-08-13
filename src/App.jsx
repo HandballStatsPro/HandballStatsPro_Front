@@ -45,7 +45,6 @@ function App() {
   const handleActionSubmit = (action) => {
     const newAction = {
       ...action,
-      id_partido: matchData.id_partido,
       id_posesion: actions.length + 1
     }
     setActions([...actions, newAction])
@@ -117,18 +116,21 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-red-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200">
+      <header className="bg-gradient-to-r from-brand-blue via-blue-600 to-brand-red shadow-lg border-b-4 border-yellow-400">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
+          <div className="flex justify-between items-center h-20">
             <div className="flex items-center">
-              <img src={logotipo} alt="HandballStats Pro" className="h-10 w-auto" />
+              <img src={logotipo} alt="HandballStats Pro" className="h-12 w-auto drop-shadow-lg" />
             </div>
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2">
-                <div className={`w-3 h-3 rounded-full ${currentStep === 'match' ? 'bg-brand-blue' : currentStep === 'actions' ? 'bg-brand-red' : 'bg-green-500'}`}></div>
-                <span className="text-sm font-medium text-gray-700">
+            <div className="flex items-center space-x-6">
+              <div className="flex items-center space-x-3">
+                <div className={`w-4 h-4 rounded-full border-2 border-white shadow-lg ${
+                  currentStep === 'match' ? 'bg-yellow-400' : 
+                  currentStep === 'actions' ? 'bg-green-400' : 'bg-purple-400'
+                }`}></div>
+                <span className="text-lg font-bold text-white drop-shadow-md">
                   {currentStep === 'match' ? 'Datos del Partido' : 
                    currentStep === 'actions' ? 'Registro de Acciones' : 'Revisión'}
                 </span>
@@ -136,9 +138,9 @@ function App() {
               {(currentStep === 'actions' || currentStep === 'review') && (
                 <button
                   onClick={resetData}
-                  className="text-sm text-gray-500 hover:text-gray-700"
+                  className="px-4 py-2 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all duration-200 font-medium backdrop-blur-sm"
                 >
-                  Reiniciar
+                  🔄 Reiniciar
                 </button>
               )}
             </div>
@@ -147,51 +149,51 @@ function App() {
       </header>
 
       {/* Navigation Tabs */}
-      <nav className="bg-white border-b border-gray-200">
+      <nav className="bg-white/80 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex space-x-8">
+          <div className="flex space-x-0">
             <button
               onClick={() => setCurrentStep('match')}
-              className={`py-4 px-1 border-b-2 font-medium text-sm ${
+              className={`py-4 px-6 border-b-4 font-bold text-sm transition-all duration-200 ${
                 currentStep === 'match'
-                  ? 'border-brand-blue text-brand-blue'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  ? 'border-brand-blue text-brand-blue bg-blue-50'
+                  : 'border-transparent text-gray-500 hover:text-brand-blue hover:border-blue-300 hover:bg-blue-25'
               }`}
             >
-              Datos del Partido
+              📋 Datos del Partido
             </button>
             <button
               onClick={() => Object.keys(matchData).length > 0 && setCurrentStep('actions')}
               disabled={Object.keys(matchData).length === 0}
-              className={`py-4 px-1 border-b-2 font-medium text-sm ${
+              className={`py-4 px-6 border-b-4 font-bold text-sm transition-all duration-200 ${
                 currentStep === 'actions'
-                  ? 'border-brand-blue text-brand-blue'
+                  ? 'border-brand-red text-brand-red bg-red-50'
                   : Object.keys(matchData).length === 0
                   ? 'border-transparent text-gray-300 cursor-not-allowed'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  : 'border-transparent text-gray-500 hover:text-brand-red hover:border-red-300 hover:bg-red-25'
               }`}
             >
-              Registro de Acciones ({actions.length})
+              ⚽ Registro de Acciones ({actions.length})
             </button>
             <button
               onClick={() => actions.length > 0 && setCurrentStep('review')}
               disabled={actions.length === 0}
-              className={`py-4 px-1 border-b-2 font-medium text-sm ${
+              className={`py-4 px-6 border-b-4 font-bold text-sm transition-all duration-200 ${
                 currentStep === 'review'
-                  ? 'border-brand-blue text-brand-blue'
+                  ? 'border-purple-500 text-purple-600 bg-purple-50'
                   : actions.length === 0
                   ? 'border-transparent text-gray-300 cursor-not-allowed'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  : 'border-transparent text-gray-500 hover:text-purple-600 hover:border-purple-300 hover:bg-purple-25'
               }`}
             >
-              Revisión y Envío
+              📊 Revisión y Envío
             </button>
           </div>
         </div>
       </nav>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+      <main className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         {currentStep === 'match' && (
           <div className="fade-in">
             <MatchDataForm 
@@ -208,6 +210,7 @@ function App() {
               onSubmit={handleActionSubmit}
               actions={actions}
               setErrors={setErrors}
+              matchData={matchData}
             />
           </div>
         )}
